@@ -1,10 +1,13 @@
 
 
 app.controller('startController', function($scope, myAuth, $state, userService) {
-    
+    $scope.profileSetup;
     $scope.grabAuth = myAuth.grabAuth;
     
     $scope.logOut = function() {
+        
+        userService.userOffline($scope.theUser.fbID);
+        userService.clearCurrent();
         myAuth.userExit();
         $state.go('login');
     };
@@ -12,6 +15,13 @@ app.controller('startController', function($scope, myAuth, $state, userService) 
         
     if ($scope.grabAuth) { 
         $scope.theUser = userService.getCurrentUser();
+        
+       
+        
+        
+        
+        
+        
     } else {
         $state.go('login');
     }
@@ -20,7 +30,14 @@ app.controller('startController', function($scope, myAuth, $state, userService) 
 
 
 
-app.controller('loginController', function($scope, $state, myAuth, userService) {
+app.controller('loginController', function($scope, $state, myAuth, userService, $timeout) {
+    
+    
+    var gotoPage = function() {
+        $state.go('home');
+    };
+    
+    
     
     $scope.loginUser = function() {
         
@@ -40,8 +57,21 @@ app.controller('loginController', function($scope, $state, myAuth, userService) 
                         for (var i = 0; i < $scope.loggedIn.length; i++) {
                             if ($scope.loggedIn[i].loginID == $scope.grabAuth.uid) {
                                 console.log($scope.loggedIn[i].user);
-                                userService.setCurrentUser($scope.loggedIn[i].user);
-                                $state.go('home');
+                                var tmpUser = {
+                                    fbID: $scope.loggedIn[i].$id,
+                                    loginID: $scope.loggedIn[i].loginID,
+                                    user: $scope.loggedIn[i].user,
+                                    online: 'true'
+                                };
+                                    
+                                
+                                
+                                
+                                userService.userOnline(tmpUser.fbID);
+                                userService.setCurrentUser(tmpUser);
+                                
+                                $timeout(gotoPage, 1000);
+                                
                             }
                         }         
                     })
@@ -79,6 +109,7 @@ app.controller('registerController', function($scope, $state, myAuth, userServic
             password: $scope.loginPassword
         }).then(function(userData) {
             $scope.saveUser =  userService.addUser(userData.uid,$scope.loginEmail);  
+            $state.go('home'); 
         }).catch(function(error) {
             alert(error);
         });

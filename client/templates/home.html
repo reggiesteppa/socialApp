@@ -15,8 +15,8 @@ controller: startController
 </div>
 <div class="menu-group-right">
 <ul class="icon-left primary menu-bar">
-<li ng-show="theUser"><a><img zf-iconic="" icon="person" size="small" class="iconic-color-primary">{{theUser}}</a></li>
-<li><a ng-click="logOut()"><img zf-iconic="" icon="circle-x" size="small" class="iconic-color-primary">logout</a></li>
+<li ng-show="theUser.user"><a>{{theUser.user}}</a></li>
+<li><a ng-click="logOut()">logout</a></li>
 </ul>
 </div>
 </div>  

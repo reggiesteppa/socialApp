@@ -25,24 +25,42 @@ app.factory('myAuth', function($firebaseAuth) {
 app.factory('userService', function($firebaseArray) {
     var myFB = new Firebase('https://socialapp-angularfire.firebaseio.com/users');
     var fbRef = $firebaseArray(myFB);
-    var current;
+    var current = {};
     var userService = {
         addUser: function(id, username) {
             fbRef.$add({
             loginID: id,
-            user: username
+            user: username,
+            online: 'false'
+            
             });
         },
         getUser: function(id) {
            return fbRef;
         },
+        clearCurrent: function() {
+            current = '';
+        },
+        
         setCurrentUser: function(user) {
+            
             current = user;
         },
         getCurrentUser: function() {
             return current; 
             
+        },
+        userOnline: function(id) {
+            var theID =  fbRef.$getRecord(id);
+            theID.online = true;
+            fbRef.$save(theID);
+        },
+        userOffline: function(id) {
+            var theID =  fbRef.$getRecord(id);
+            theID.online = false;
+            fbRef.$save(theID);
         }
+        
     };
     
     return userService;
