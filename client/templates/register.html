@@ -1,0 +1,27 @@
+---
+name: register
+url: /register
+controller: registerController
+
+---
+
+<div class="grid-container">
+  <h1>Register</h1>
+    <form>
+        <label>
+            Email/Username
+            <input type="text" placeholder="Enter email address" ng-model="loginEmail">
+        </label>
+        <label>
+            Password
+            <input type="password" placeholder="Enter password" ng-model="loginPassword">
+        </label>
+        <label>
+            Password Confirm
+            <input type="password" placeholder="Confirm password" ng-model="loginPasswordConfirm">
+        </label>
+        <button class="button" ng-model="registerButton" ng-disabled="!loginEmail || !loginPassword || !loginPasswordConfirm" ng-click="regUser()">Register</button>
+        <button class="alert button" ng-model="cancelButton" ng-click="cancelRegister()">Cancel</button>
+    </form>
+    <div ng-hide="loginPassword == loginPasswordConfirm"><p class="errorText">Passwords do not match</p></div>
+</div>
