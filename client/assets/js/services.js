@@ -39,7 +39,7 @@ app.factory('userService', function($firebaseArray) {
            return fbRef;
         },
         clearCurrent: function() {
-            current = '';
+            current = {};
         },
         
         setCurrentUser: function(user) {
@@ -52,13 +52,13 @@ app.factory('userService', function($firebaseArray) {
         },
         userOnline: function(id) {
             var theID =  fbRef.$getRecord(id);
-            theID.online = true;
+            theID.online = 'true';
             fbRef.$save(theID);
         },
         userOffline: function(id) {
-            var theID =  fbRef.$getRecord(id);
-            theID.online = false;
-            fbRef.$save(theID);
+            var myID =  fbRef.$getRecord(id);
+            myID.online = 'false';
+            fbRef.$save(myID);
         }
         
     };

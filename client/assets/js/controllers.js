@@ -4,27 +4,33 @@ app.controller('startController', function($scope, myAuth, $state, userService) 
     $scope.profileSetup;
     $scope.grabAuth = myAuth.grabAuth;
     
-    $scope.logOut = function() {
+    
+    if ($scope.grabAuth) { 
+        $scope.theUser = userService.getCurrentUser();
+        $scope.allUsers = userService.getUser();
         
-        userService.userOffline($scope.theUser.fbID);
+        console.log($scope.allUsers);
+        console.log($scope.theUser);
+        
+        
+    } else {
+        $state.go('login');
+    };
+    
+        
+    
+    $scope.logOut = function() {
+        console.log($scope.theUser.fbID);
+        var tmpID = $scope.theUser.fbID;
+        userService.userOffline(tmpID);
         userService.clearCurrent();
+        
         myAuth.userExit();
         $state.go('login');
     };
         
         
-    if ($scope.grabAuth) { 
-        $scope.theUser = userService.getCurrentUser();
-        
-       
-        
-        
-        
-        
-        
-    } else {
-        $state.go('login');
-    }
+    
 });
 
 
@@ -32,6 +38,11 @@ app.controller('startController', function($scope, myAuth, $state, userService) 
 
 app.controller('loginController', function($scope, $state, myAuth, userService, $timeout) {
     
+    $scope.theUser = userService.getCurrentUser();
+    userService.clearCurrent();
+    
+    
+    var tmpUser = {};
     
     var gotoPage = function() {
         $state.go('home');
@@ -57,7 +68,7 @@ app.controller('loginController', function($scope, $state, myAuth, userService, 
                         for (var i = 0; i < $scope.loggedIn.length; i++) {
                             if ($scope.loggedIn[i].loginID == $scope.grabAuth.uid) {
                                 console.log($scope.loggedIn[i].user);
-                                var tmpUser = {
+                                tmpUser = {
                                     fbID: $scope.loggedIn[i].$id,
                                     loginID: $scope.loggedIn[i].loginID,
                                     user: $scope.loggedIn[i].user,
